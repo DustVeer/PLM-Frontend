@@ -1,26 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { useProduct } from "../hooks/useProducts";
 
 export default function ProductCard() {
   const [id, setId] = useState(1);
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    setLoading(true);
-    setError(null);
-    fetch(`/api/products/${id}`)
-      .then(async (r) => {
-        if (!r.ok)
-          throw new Error(
-            r.status === 404 ? "Product niet gevonden" : "Serverfout"
-          );
-        return r.json();
-      })
-      .then(setData)
-      .catch((e) => setError(e.message))
-      .finally(() => setLoading(false));
-  }, [id]);
+  const { data, loading, error } = useProduct(id);
 
   return (
     <div className="max-w-md mx-auto p-6">
@@ -36,18 +19,21 @@ export default function ProductCard() {
       </div>
 
       <div className="border rounded-2xl p-5 shadow">
-        {loading && <p className="text-sm">Laden…</p>}
-        {error && <p className="text-sm text-red-600">{error}</p>}
+        {loading && <p>Loading…</p>}
+        {error && <p className="text-red-600">{error}</p>}
         {!loading && !error && data && (
-          <div>
+          <>
             <h2 className="text-lg font-semibold mb-2">Product #{data.id}</h2>
-            <p className="text-gray-700">
+            <p>
               <span className="font-medium">Name:</span> {data.name}
             </p>
-          </div>
-        )}
-        {!loading && !error && !data && (
-          <p className="text-sm text-gray-500">Geen data</p>
+            <p>
+              <span className="font-medium">Price:</span>{" "}
+              {data.price != null
+                ? `€${Number(data.price).toFixed(2)}`
+                : "n.v.t."}
+            </p>
+          </>
         )}
       </div>
     </div>
