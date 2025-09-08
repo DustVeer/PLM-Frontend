@@ -4,6 +4,7 @@ import viteLogo from "/vite.svg";
 import SideBar from "./components/SideBar.jsx";
 import Header from "./components/Header.jsx";
 import StockPage from "./pages/StockPage.jsx";
+import ProductCard from "./components/ProductCard.jsx";
 
 function App() {
   const products = [
@@ -17,9 +18,9 @@ function App() {
     <>
       <div className="flex h-screen bg-gray-100">
         <SideBar />
-        <div class="flex flex-col flex-1 overflow-y-auto">
+        <div className="flex flex-col flex-1 overflow-y-auto">
           <Header />
-          <StockPage />
+          <ProductCard />
         </div>
       </div>
     </>
