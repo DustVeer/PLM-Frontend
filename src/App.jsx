@@ -5,6 +5,7 @@ import SideBar from "./components/SideBar.jsx";
 import Header from "./components/Header.jsx";
 import StockPage from "./pages/StockPage.jsx";
 import ProductCard from "./components/ProductCard.jsx";
+import ProductStatusFlow from "./pages/FlowPage.jsx";
 
 function App() {
   const products = [
@@ -20,7 +21,8 @@ function App() {
         <SideBar />
         <div className="flex flex-col flex-1 overflow-y-auto">
           <Header />
-          <ProductCard />
+          <ProductStatusFlow />
+          {/* <ProductCard /> */}
         </div>
       </div>
     </>
