@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 function SideBar() {
   return (
     <>
@@ -7,8 +9,8 @@ function SideBar() {
         </div>
         <div className="flex flex-col flex-1 overflow-y-auto">
           <nav className="flex-1 px-2 py-4 bg-gray-800">
-            <a
-              href="#"
+            <Link
+              to="/"
               className="flex items-center px-4 py-2 text-gray-100 hover:bg-gray-700"
             >
               <svg
@@ -25,10 +27,10 @@ function SideBar() {
                   d="M4 6h16M4 12h16M4 18h16"
                 />
               </svg>
-              Dashboard
-            </a>
-            <a
-              href="#"
+              Home
+            </Link>
+            <Link
+              to="/FlowPage"
               className="flex items-center px-4 py-2 mt-2 text-gray-100 hover:bg-gray-700"
             >
               <svg
@@ -45,8 +47,8 @@ function SideBar() {
                   d="M6 18L18 6M6 6l12 12"
                 />
               </svg>
-              Messages
-            </a>
+              Product flow
+            </Link>
           </nav>
         </div>
       </div>

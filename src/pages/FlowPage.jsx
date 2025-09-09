@@ -1,26 +1,5 @@
 import React, { useState } from "react";
 
-/**
- * ProductStatusFlow.jsx (React + JavaScript + Tailwind)
- *
- * Drop-in component to visualize a product lifecycle for your PLM app.
- *
- * Features
- * - Data‑driven steps (id, title, description)
- * - Horizontal flow with connecting arrows
- * - Click a step to set it as the current status
- * - Shows progress color up to current status
- * - Responsive: wraps to multiple rows on small screens; scroll-x helper for tiny screens
- * - Pure React + Tailwind (no extra deps)
- *
- * Usage
- *   <ProductStatusFlow
- *     steps={defaultSteps}
- *     initialStatus="concept"
- *     onStatusChange={(id) => console.log("new status:", id)}
- *   />
- */
-
 const defaultSteps = [
   {
     id: "concept",
@@ -166,7 +145,6 @@ export default function ProductStatusFlow({
                     />
                   </div>
                 </button>
-
                 {/* Arrow (except last) */}
                 {idx < steps.length - 1 && (
                   <div className="flex w-8 items-center justify-center md:w-10">
