@@ -7,7 +7,7 @@ const defaultSteps = [
     description: "Ideation, requirements & feasibility",
   },
   {
-    id: "design",
+    id: "design test",
     title: "Design",
     description: "Sketches, silhouettes, materials",
   },
