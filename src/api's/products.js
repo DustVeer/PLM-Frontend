@@ -5,3 +5,5 @@ export const ProductsApi = {
   list: () => api.get(`/products`),
   create: (dto) => api.post(`/products`, dto),
 };
+
+export default ProductsApi;
