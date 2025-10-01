@@ -1,4 +1,5 @@
 import { useSidebar } from "../context/SidebarContext";
+import { Link } from "react-router-dom";
 
 function Sidebar() {
 
@@ -27,11 +28,11 @@ function Sidebar() {
                 </div>
 
                 <div className="bg-white rounded-xl shadow-lg p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
-                    <a href="#" className="flex items-center text-gray-600 hover:text-indigo-800 py-4 transition-all duration-300 hover:translate-x-1">
+                    <Link to="/profile" className="flex items-center text-gray-600 hover:text-indigo-800 py-4 transition-all duration-300 hover:translate-x-1">
                         <span className="material-icons-outlined mr-2">face</span>
                         Profile
                         <span className="material-icons-outlined ml-auto">keyboard_arrow_right</span>
-                    </a>
+                    </Link>
                     <a href="#" className="flex items-center text-gray-600 hover:text-indigo-800 py-4 transition-all duration-300 hover:translate-x-1">
                         <span className="material-icons-outlined mr-2">settings</span>
                         Settings

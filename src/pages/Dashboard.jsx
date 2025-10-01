@@ -1,25 +1,8 @@
 import { useState, useEffect } from "react";
-import UsersApi from "../api's/users";
+import UsersApi from "../apis/users";
 
 
 function Dashboard() {
-
-    const [userName, setUserName] = useState("User");
-
-    useEffect(() => {
-        const getUser = async () => {
-            try {
-                const userRequest = await UsersApi.getById(2);
-                setUserName(userRequest.name);
-                console.log("Testing userName: " + userName);
-                
-            } catch (error) {
-                console.error("There was a problem with the fetch operation:", error);
-            }
-            
-        }
-         getUser();
-    }, []);
 
 
     return (
@@ -28,7 +11,7 @@ function Dashboard() {
                 <div className="flex flex-col lg:flex-row gap-4 mb-6">
                     <div className="flex-1 bg-indigo-100 border border-indigo-200 rounded-xl p-6 animate-fade-in">
                         <h2 className="text-4xl md:text-5xl text-blue-900">
-                            Welcome <br /><strong>{userName}</strong>
+                            Welcome <br /><strong>Dustin</strong>
                         </h2>
                         <span className="inline-block mt-8 px-8 py-2 rounded-full text-xl font-bold text-white bg-indigo-800">
                             01:51
