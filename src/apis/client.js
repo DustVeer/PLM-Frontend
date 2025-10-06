@@ -1,17 +1,40 @@
 const BASE_URL = "http://localhost:8080/api";
 
-async function request(path, options = {}) {
-  const res = await fetch(`${BASE_URL}${path}`, {
-    headers: { "Content-Type": "application/json", ...(options.headers || {}) },
-    ...options,
-  });
-  if (!res.ok) {
-    const msg = res.status === 404 ? "Product niet gevonden" : "Serverfout";
-    throw new Error(msg);
+export class ApiError extends Error {
+  constructor(message, status, body) {
+    super(message);
+    this.name = "ApiError";
+    this.status = status;
+    this.body = body;
   }
-  // 204 guard
-  if (res.status === 204) return null;
-  return res.json();
+}
+
+async function request(path, options = {}) {
+  let res;
+
+  try {
+    res = await fetch(`${BASE_URL}${path}`, {
+      headers: { "Content-Type": "application/json", ...(options.headers || {}) },
+      ...options,
+    })
+  }
+  catch {
+    throw new ApiError("Network error", 0, null);
+  }
+
+  const isJson = res.headers.get("content-type")?.includes("application/json");
+  const payload = isJson ? await res.json().catch(() => null)
+    : await res.text().catch(() => "");
+
+  if (!res.ok) {
+    const msg =
+      (isJson ? payload?.message || payload?.error : payload) ||
+      `HTTP ${res.status}`;
+    throw new ApiError(msg, res.status, payload);
+  }
+
+  return payload;
+
 }
 
 export const api = {

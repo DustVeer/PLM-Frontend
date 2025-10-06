@@ -1,8 +1,13 @@
 import { useState, useEffect } from "react";
 import UsersApi from "../apis/users";
+import { useAuth } from "../context/AuthContext"; 
+
 
 
 function Dashboard() {
+    const { user } = useAuth();
+    const userObject = JSON.parse(user);
+  
 
 
     return (
@@ -11,7 +16,7 @@ function Dashboard() {
                 <div className="flex flex-col lg:flex-row gap-4 mb-6">
                     <div className="flex-1 bg-indigo-100 border border-indigo-200 rounded-xl p-6 animate-fade-in">
                         <h2 className="text-4xl md:text-5xl text-blue-900">
-                            Welcome <br /><strong>Dustin</strong>
+                            Welcome <br /><strong>{userObject.name}</strong>
                         </h2>
                         <span className="inline-block mt-8 px-8 py-2 rounded-full text-xl font-bold text-white bg-indigo-800">
                             01:51

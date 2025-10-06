@@ -5,6 +5,7 @@ import NotFoundPage from "../pages/NotFoundPage";
 import ProfilePage from "../pages/ProfilePage";
 import Login from "../pages/Login";
 import {AuthProvider} from "../context/AuthContext";
+import RequireAuth from "../components/RequireAuth";
 
 export const RouterObjects = [
 	{
@@ -13,7 +14,10 @@ export const RouterObjects = [
 	},
 	{
 
-		element: <RootLayout />,
+		element:
+			<RequireAuth>
+				<RootLayout />	
+			</RequireAuth>,
 		children: [
 			{ path: "/", element: <Dashboard /> },
 			{ path: "/profile", element: <ProfilePage /> },

@@ -2,10 +2,11 @@ import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import AuthApi from "../apis/auth";
 
 const TOKEN_KEY = "accessToken";
+const USER_KEY = "currentUser";
+
 const AuthContext = createContext(null);
 
 function getStoredToken() {
-    // Prefer localStorage, fall back to sessionStorage
     return localStorage.getItem(TOKEN_KEY) ?? sessionStorage.getItem(TOKEN_KEY) ?? null;
 }
 
@@ -17,13 +18,34 @@ function setStoredToken(token, remember) {
     other.removeItem(TOKEN_KEY);
 }
 
+//Saves the user just like the token functions
+function getStoredUser() {
+    return localStorage.getItem(USER_KEY) ?? sessionStorage.getItem(USER_KEY) ?? null;
+}
+
+function setStoredUser(user, remember) {
+    // Store in the chosen storage and remove from the other
+    const target = remember ? localStorage : sessionStorage;
+    const other = remember ? sessionStorage : localStorage;
+    target.setItem(USER_KEY, user);
+    other.removeItem(USER_KEY);
+}
+
+
 function clearStoredToken() {
     localStorage.removeItem(TOKEN_KEY);
     sessionStorage.removeItem(TOKEN_KEY);
 }
 
+function clearStoredUser() {
+    localStorage.removeItem(USER_KEY);
+    sessionStorage.removeItem(USER_KEY);
+}
+
 export function AuthProvider({ children }) {
     const [token, setToken] = useState(() => getStoredToken());
+    const [user, setUser] = useState(() => getStoredUser());
+
 
     useEffect(() => {
         // Keep state in sync if another tab logs in/out
@@ -40,37 +62,28 @@ export function AuthProvider({ children }) {
 
         const res = await AuthApi.login({ email, password });
 
-        console.log(res);
-
-        // surface any backend message
-        if (!res.ok) {
-            const msg = await res.text();
-            throw new Error(msg || `Login failed (${res.status})`);
-        }
-
-
-        const data = await res.json();
-
-        console.log(data);
-
-        const receivedToken = data.token;
+        const receivedToken = res.token;
+        const user = {userId: res.userId, name: res.userName, email: res.userEmail, role: res.userRoleResponse};
 
         if (!receivedToken) {
             throw new Error("Token not found in response.");
         }
 
         setToken(receivedToken);
+        setUser(JSON.stringify(user));
         setStoredToken(receivedToken, !!remember);
+        setStoredUser(JSON.stringify(user), !!remember); //saves the user
         return receivedToken;
     }
 
     function logout() {
         clearStoredToken();
+        clearStoredUser();
         setToken(null);
     }
 
     const value = useMemo(
-        () => ({ token, isAuthenticated: !!token, login, logout }),
+        () => ({ token, user, isAuthenticated: !!token, login, logout }),
         [token]
     );
 
