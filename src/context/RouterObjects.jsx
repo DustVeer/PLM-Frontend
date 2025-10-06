@@ -4,7 +4,6 @@ import Dashboard from "../pages/Dashboard";
 import NotFoundPage from "../pages/NotFoundPage";
 import ProfilePage from "../pages/ProfilePage";
 import Login from "../pages/Login";
-import {AuthProvider} from "../context/AuthContext";
 import RequireAuth from "../components/RequireAuth";
 
 export const RouterObjects = [
@@ -23,5 +22,6 @@ export const RouterObjects = [
 			{ path: "/profile", element: <ProfilePage /> },
 			{ path: "*", element: <NotFoundPage /> },
 		],
-	},
+	}
+	
 ];
