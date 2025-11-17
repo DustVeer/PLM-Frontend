@@ -7,7 +7,7 @@ import { useAuth } from "../context/AuthContext";
 function Dashboard() {
     const { user } = useAuth();
     const userObject = JSON.parse(user);
-  
+    
 
 
     return (

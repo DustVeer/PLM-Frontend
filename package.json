@@ -7,6 +7,7 @@
     "deploy": "gh-pages -d build",
     "dev": "vite --host --port 5173",
     "build": "vite build",
+     "postbuild": "cp dist/index.html dist/404.html && echo > dist/.nojekyll",
     "lint": "eslint .",
     "preview": "vite preview"
   },

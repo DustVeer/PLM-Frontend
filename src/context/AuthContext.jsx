@@ -6,8 +6,12 @@ const USER_KEY = "currentUser";
 
 const AuthContext = createContext(null);
 
-function getStoredToken() {
-    return localStorage.getItem(TOKEN_KEY) ?? sessionStorage.getItem(TOKEN_KEY) ?? null;
+export function getStoredToken() {
+  return (
+    localStorage.getItem(TOKEN_KEY) ??
+    sessionStorage.getItem(TOKEN_KEY) ??
+    null
+  );
 }
 
 function setStoredToken(token, remember) {
@@ -63,7 +67,7 @@ export function AuthProvider({ children }) {
         const res = await AuthApi.login({ email, password });
 
         const receivedToken = res.token;
-        const user = {userId: res.userId, name: res.userName, email: res.userEmail, role: res.userRoleResponse};
+        const user = { userId: res.userId, name: res.userName, email: res.userEmail, role: res.userRoleResponse };
 
         if (!receivedToken) {
             throw new Error("Token not found in response.");

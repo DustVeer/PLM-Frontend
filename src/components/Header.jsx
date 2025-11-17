@@ -2,6 +2,7 @@ import { useSidebar } from "../context/SidebarContext";
 
 function Header() {
     const { toggle } = useSidebar();
+    
     return (
         <>
             <header className="fixed w-full bg-white text-indigo-800 z-50 shadow-lg animate-slide-down">
