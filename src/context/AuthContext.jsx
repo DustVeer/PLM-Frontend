@@ -23,7 +23,7 @@ function setStoredToken(token, remember) {
 }
 
 //Saves the user just like the token functions
-function getStoredUser() {
+export function getStoredUser() {
     return localStorage.getItem(USER_KEY) ?? sessionStorage.getItem(USER_KEY) ?? null;
 }
 

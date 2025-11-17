@@ -15,6 +15,7 @@ async function request(path, options = {}) {
     const token = getStoredToken(); 
     let res;
     console.log("path", path);
+    console.log("options", options);
 
     try {
         res = await fetch(`${BASE_URL}${path}`, {

@@ -20,7 +20,7 @@ function Products() {
         <>
             <main className="flex-1 p-4 bg-white rounded-xl shadow-lg animate-fade-in">
                 <div className="p-6">
-                    <h2 className="text-2xl font-semibold mb-4">Producten Lijst</h2>
+                    <h2 className="text-2xl font-semibold mb-4">Product List</h2>
                     <div className="flex mb-2">
                         <div className="flex items-center gap-3">
 
@@ -57,12 +57,12 @@ function Products() {
                             <thead className="bg-gray-100">
                                 <tr>
                                     <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">#</th>
-                                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">Naam</th>
+                                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">Name</th>
                                     <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">Status</th>
                                     <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">Categorie</th>
-                                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">Beschrijving</th>
-                                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">Aangemaakt op</th>
-                                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">Aangepast op</th>
+                                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">Description</th>
+                                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">Created At</th>
+                                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">Updated At</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-200">
@@ -71,7 +71,7 @@ function Products() {
                                         <td className="px-6 py-3 text-sm text-gray-700">{index + 1}</td>
                                         <td className="px-6 py-3 text-sm text-gray-700">{product.name}</td>
                                         <td className="p-3 flex justify-start align-start">
-                                            <div className={`p-3   text-sm text-gray-700 rounded-4xl bg-[${product.productStatus.statusColorHex}]`}>{product.productStatus.name}</div>
+                                            <div style={{ backgroundColor: product.productStatus.statusColorHex }} className="p-3   text-sm text-gray-700 rounded-4xl ">{product.productStatus.name}</div>
                                         </td>
                                         <td className="px-6 py-3 text-sm text-gray-700">{product.productCategory.name}</td>
                                         <td className="px-6 py-3 text-sm text-gray-700">{product.description}</td>
