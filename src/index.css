@@ -3,3 +3,11 @@
 .btn-primary {
   @apply py-2 px-7 inline-flex items-center gap-x-2 text-base rounded-2xl border border-indigo-800 text-indigo-800 hover:border-indigo-800 hover:text-white hover:bg-indigo-800;
 }
+
+.btn-save {
+  @apply inline-flex items-center rounded-xl bg-green-700 px-5 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-800 disabled:opacity-60 disabled:cursor-not-allowed hover:scale-105 transition-transform duration-200 hover:cursor-pointer;
+}
+
+.form-input {
+  @apply ps-1 py-1 mt-1 w-full rounded-md border-indigo-900 border-1 shadow-sm focus:ring-indigo-500 focus:border-indigo-500;
+}

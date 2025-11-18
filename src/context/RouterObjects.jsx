@@ -2,7 +2,7 @@ import React from "react";
 import RootLayout from "../layouts/RootLayout";
 import Dashboard from "../pages/Dashboard";
 import NotFoundPage from "../pages/NotFoundPage";
-import ProfilePage from "../pages/ProfilePage";
+import Profile from "../pages/Profile";
 import Login from "../pages/Login";
 import Products from "../pages/Products";
 import RequireAuth from "../components/RequireAuth";
@@ -22,7 +22,7 @@ export const RouterObjects = [
 			</RequireAuth>,
 		children: [
 			{ path: "/", element: <Dashboard /> },
-			{ path: "/profile", element: <ProfilePage /> },
+			{ path: "/profile", element: <Profile /> },
 			{ path: "/products", element: <Products /> },
 			{ path: "/products/:id", element: <ProductDetails /> },
 			{ path: "/products/add", element: <AddProduct /> },

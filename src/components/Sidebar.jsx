@@ -20,7 +20,7 @@ function Sidebar() {
                     </Link>
                     <Link to="/products" className="flex items-center text-gray-600 hover:text-indigo-800 py-4 transition-all duration-300 hover:translate-x-1">
                         <span className="material-icons-outlined mr-2">tune</span>
-                        Producten
+                        Products
                         <span className="material-icons-outlined ml-auto">keyboard_arrow_right</span>
                     </Link>
                     <a href="#" className="flex items-center text-gray-600 hover:text-indigo-800 py-4 transition-all duration-300 hover:translate-x-1">
@@ -33,7 +33,7 @@ function Sidebar() {
                 <div className="bg-white rounded-xl shadow-lg p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
                     <Link to="/profile" className="flex items-center text-gray-600 hover:text-indigo-800 py-4 transition-all duration-300 hover:translate-x-1">
                         <span className="material-icons-outlined mr-2">face</span>
-                        Profiel
+                        Profile
                         <span className="material-icons-outlined ml-auto">keyboard_arrow_right</span>
                     </Link>
                     <a href="#" className="flex items-center text-gray-600 hover:text-indigo-800 py-4 transition-all duration-300 hover:translate-x-1">

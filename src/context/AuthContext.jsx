@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import AuthApi from "../apis/auth";
 
 const TOKEN_KEY = "accessToken";
-const USER_KEY = "currentUser";
+const USER_KEY = "currentUserID";
 
 const AuthContext = createContext(null);
 
@@ -67,16 +67,16 @@ export function AuthProvider({ children }) {
         const res = await AuthApi.login({ email, password });
 
         const receivedToken = res.token;
-        const user = { userId: res.userId, name: res.userName, email: res.userEmail, role: res.userRoleResponse };
+        const userId = res.userId;
 
         if (!receivedToken) {
             throw new Error("Token not found in response.");
         }
 
         setToken(receivedToken);
-        setUser(JSON.stringify(user));
+        setUser(JSON.stringify(userId));
         setStoredToken(receivedToken, !!remember);
-        setStoredUser(JSON.stringify(user), !!remember); //saves the user
+        setStoredUser(JSON.stringify(userId), !!remember); //saves the user
         return receivedToken;
     }
 
