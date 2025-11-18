@@ -1,44 +1,40 @@
 // StatusPill.jsx
 export default function StatusPill({ status, isCurrent, isBehind }) {
-  if (!status) return null;
-
-  
-  var bgColor = null;
-  
-  if (isBehind) {
-    bgColor = "#f7867e"; // Green for current status
-  } else if (isCurrent) {
-    bgColor = status.colorHexCode; // Red for behind status
-  }
-  else {
-    bgColor = "#E5E7EB"; // Default or provided color
-  }
+    if (!status) return null;
 
 
-  return (
-    <div className="relative inline-block group">
-      {/* The pill itself */}
-      <div
-        className="p-4 rounded-full font-medium text-lg "
-        style={{ backgroundColor: bgColor, color: "black",  }}
-      >
-        {status.name ?? "Unknown status"}
-      </div>
+    var bgColor = (isBehind || isCurrent) ? status.colorHexCode : "#E5E7EB";
 
-      {/* Tooltip */}
-      <div
-        className="
+
+
+    return (
+        <div className={`relative inline-block group hover:cursor-pointer hover:scale-105 transition-transform duration-150" `}>
+            {/* The pill itself */}
+            <div
+                className={`p-4 rounded-full font-medium text-lg ${isBehind ? "opacity-40" : ""}`}
+                style={{ backgroundColor: bgColor, color: "black", }}
+            >
+                {status.name ?? "Unknown status"}
+            </div>
+
+            {/* Tooltip */}
+            <div
+                className="
           pointer-events-none
-          absolute left-1/2 top-full mt-2 -translate-x-1/2
+          absolute left-1/2 top-xl mt-2 -translate-x-1/2
           z-20
           w-max max-w-xs
           rounded-md border border-gray-200 bg-white px-3 py-2 text-xs text-gray-800 shadow-lg
           opacity-0 group-hover:opacity-100
           transition-opacity duration-150
         "
-      >
-        {status.description || "No description available."}
-      </div>
-    </div>
-  );
+            >
+                <div className="flex justify-center flex-col items-center space-y-2">
+                    <p className="text-black text-2xl">{status.description || "No description available."}</p>
+                     <p className="text-lg">Click to set status</p> 
+                </div>
+
+            </div>
+        </div>
+    );
 }

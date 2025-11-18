@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { getStoredUser } from "../../context/AuthContext";
 import ProductsApi from "../../apis/products";
 import StatusesApi from "../../apis/statuses";
 import StatusPill from "../../components/productPages/StatusPill";
@@ -7,8 +8,10 @@ import StatusPill from "../../components/productPages/StatusPill";
 function ProductDetails() {
     const { id } = useParams();
     const navigate = useNavigate();
+    const userId = JSON.parse(getStoredUser());
 
     const [product, setProduct] = useState(null);
+    const [newStatus, setNewStatus] = useState(null);
     const [statuses, setStatuses] = useState([]);
     const [form, setForm] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -16,12 +19,57 @@ function ProductDetails() {
     const [error, setError] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
 
+    // Function to update product details
+    async function updateProduct() {
+        setSaving(true);
+        setError(null);
+        try {
+
+            console.log("Updating product with form data:", form);
+            // Backend update
+            const updated = await ProductsApi.update(id, {
+                name: form.name,
+                description: form.description,
+                categoryId: parseInt(form.categoryId),
+                statusId: parseInt(form.statusId),
+                updatedBy: userId
+            });
+
+            setProduct(updated);
+            // sync form with backend result
+            setForm({
+                name: updated.name || "",
+                description: updated.description || "",
+                categoryId: updated.productCategory?.id ?? "",
+                statusId: updated.productStatus?.id ?? "",
+                updatedBy: userId
+            });
+            setIsEditing(false);
+        } catch (err) {
+            setError(err.message || "Failed to save product.");
+        } finally {
+            setSaving(false);
+        }
+    }
+
     useEffect(() => {
-        async function fetchProductDetails() {
+        if (newStatus && form) {
+            setForm({
+                ...form,
+                statusId: newStatus,
+            });
+
+        }
+        setIsEditing(true);
+    }, [newStatus]);
+
+    // Load product details on mount
+    useEffect(() => {
+
+        async function fetchProductData() {
             setError(null);
             setLoading(true);
-
-
+            setIsEditing(false);
 
             try {
                 const data = await ProductsApi.getById(id);
@@ -36,6 +84,7 @@ function ProductDetails() {
                     description: data.description || "",
                     categoryId: data.productCategory?.id ?? "",
                     statusId: data.productStatus?.id ?? "",
+                    updatedBy: data.updatedBy?.id || "",
                 });
             } catch (err) {
                 setError(err.message || "Failed to load product details.");
@@ -43,54 +92,29 @@ function ProductDetails() {
                 setLoading(false);
             }
         }
+        fetchProductData();
 
-        fetchProductDetails();
+
     }, [id]);
 
-    useEffect(() => {
-        console.log("Form updated:", form);
-    }, [form]);
+
+
 
     function handleChange(e) {
         setForm({
             ...form,
             [e.target.name]: e.target.value,
         });
+        console.log("status", newStatus);
     }
 
     async function handleSave(e) {
         e.preventDefault();
         if (!form) return;
 
-        setSaving(true);
-        setError(null);
-
-
-
-        try {
-            // Adjust payload to what your backend expects
-            const updated = await ProductsApi.update(id, {
-                name: form.name,
-                description: form.description,
-                categoryId: parseInt(form.categoryId),
-                statusId: parseInt(form.statusId),
-            });
-
-            setProduct(updated);
-            // sync form with backend result
-            setForm({
-                name: updated.name || "",
-                description: updated.description || "",
-                categoryId: updated.productCategory?.id ?? "",
-                statusId: updated.productStatus?.id ?? "",
-            });
-            setIsEditing(false);
-        } catch (err) {
-            setError(err.message || "Failed to save product.");
-        } finally {
-            setSaving(false);
-        }
+        await updateProduct();
     }
+
 
     function handleCancelEdit() {
         if (!product) return;
@@ -133,6 +157,7 @@ function ProductDetails() {
                     </p>
                 </div>
 
+
                 {/* Statuses pils */}
                 <div className="flex items-center">
 
@@ -140,11 +165,12 @@ function ProductDetails() {
                         const isLatest = index === statuses.length - 1;
                         const isCurrent = product.productStatus && (status.id === product.productStatus.id);
                         const isBehind = product.productStatus && (status.id < product.productStatus.id);
+
                         return (
-                            <div key={index} className="flex items-center gap-1">
-                                <div className="flex items-center">
+                            <div key={index} className="flex items-center gap-1" onClick={() => setNewStatus(status.id)}>
+                                <button className="flex items-center"  >
                                     <StatusPill status={status} isCurrent={isCurrent} isBehind={isBehind} />
-                                </div>
+                                </button>
                                 {!isLatest && (
                                     <span className="material-icons-outlined mr-2">arrow_forward</span>
                                 )}
@@ -315,44 +341,36 @@ function ProductDetails() {
                 {/* Right: meta info */}
                 <div className="space-y-4">
                     <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+
                         <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
-                            Created by
+                            Created At
                         </h3>
+                        <p>{product.createdAt ? new Date(product.createdAt).toLocaleString() : "—"}</p>
                         <div className="mt-3 text-sm space-y-1">
+                            <p className="text-gray-900">Created By</p>
                             <p className="text-gray-900">
                                 Name: {product.createdBy?.name ?? "Unknown"}
                             </p>
                             <p className="text-gray-900">
                                 Email: {product.createdBy?.email ?? "Unknown"}
                             </p>
-                            <p className="text-gray-500">
-                                User ID: {product.createdBy?.id ?? "—"}
-                            </p>
                         </div>
                     </div>
 
                     <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
                         <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
-                            Timestamps
+                            Last updated At
                         </h3>
-                        <dl className="mt-3 space-y-2 text-xs text-gray-700">
-                            <div>
-                                <dt className="text-gray-500">Created At</dt>
-                                <dd>
-                                    {product.createdAt
-                                        ? new Date(product.createdAt).toLocaleString()
-                                        : "—"}
-                                </dd>
-                            </div>
-                            <div>
-                                <dt className="text-gray-500">Updated At</dt>
-                                <dd>
-                                    {product.updatedAt
-                                        ? new Date(product.updatedAt).toLocaleString()
-                                        : "—"}
-                                </dd>
-                            </div>
-                        </dl>
+                        <p>{product.updatedAt ? new Date(product.updatedAt).toLocaleString() : "—"}</p>
+                        <div className="mt-3 text-sm space-y-1">
+                            <p className="text-gray-900">Updated By</p>
+                            <p className="text-gray-900">
+                                Name: {product.updatedBy?.name ?? "Unknown"}
+                            </p>
+                            <p className="text-gray-900">
+                                Email: {product.updatedBy?.email ?? "Unknown"}
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
