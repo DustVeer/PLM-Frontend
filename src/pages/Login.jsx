@@ -60,10 +60,10 @@ function Login() {
                         </div>
                         <div className="flex justify-center align-middle">
                             <input type="checkbox" checked={remember} onChange={e => setRemember(e.target.checked)} className="bg-indigo-500 rounded-xl p-2 px-10 text-white"/>
-                            <p className="ps-2">Onthoud mij?</p>
+                            <p className="ps-2">Remember me?</p>
                         </div>
                         <div className="flex justify-center align-middle">
-                            <input type="submit" value="Login" className="bg-indigo-500 rounded-xl p-2 px-10 text-white"/>
+                            <input type="submit" value="Login" className="bg-indigo-500 rounded-xl p-2 px-10 text-white hover:cursor-pointer hover:scale-105 hover:bg-indigo-600 duration-200"/>
                         </div>
                     </form>
                 </div>

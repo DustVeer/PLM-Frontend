@@ -3,3 +3,24 @@
 .btn-primary {
   @apply py-2 px-7 inline-flex items-center gap-x-2 text-base rounded-2xl border border-indigo-800 text-indigo-800 hover:border-indigo-800 hover:text-white hover:bg-indigo-800;
 }
+
+.btn-green {
+  @apply inline-flex items-center rounded-lg bg-green-700 px-5 py-2 font-medium text-white shadow-sm hover:bg-green-800 disabled:opacity-60 disabled:cursor-not-allowed hover:scale-105 transition-transform duration-200 hover:cursor-pointer;
+}
+
+.form-input {
+  @apply ps-1 py-1 mt-1 w-full rounded-md border-indigo-900 border-1 shadow-sm focus:ring-indigo-500 focus:border-indigo-500;
+
+}
+
+.btn-cancel {
+  @apply px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 hover:cursor-pointer hover:scale-105 transform transition-all duration-150;
+}
+
+.text-link {
+  @apply text-sm text-indigo-600 hover:text-indigo-700 hover:underline hover:cursor-pointer;
+}
+
+.text-link-red {
+  @apply text-sm text-red-600 hover:text-red-800 hover:cursor-pointer hover:underline;
+}

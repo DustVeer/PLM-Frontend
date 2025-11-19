@@ -13,21 +13,21 @@ function Sidebar() {
         <>
             <aside className={`fixed top-16 left-0 bottom-0 lg:static w-[240px] bg-indigo-50overflow-y-auto p-4 transition-transform duration-300z-50 ${isOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}>
                 <div className="bg-white rounded-xl shadow-lg mb-6 p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
-                    <a href="#" className="flex items-center text-gray-600 hover:text-indigo-800 py-4 transition-all duration-300 hover:translate-x-1">
+                    <Link to="/" className="flex items-center text-gray-600 hover:text-indigo-800 py-4 transition-all duration-300 hover:translate-x-1">
                         <span className="material-icons-outlined mr-2">dashboard</span>
                         Dashboard
                         <span className="material-icons-outlined ml-auto">keyboard_arrow_right</span>
-                    </a>
-                    <a href="#" className="flex items-center text-gray-600 hover:text-indigo-800 py-4 transition-all duration-300 hover:translate-x-1">
+                    </Link>
+                    <Link to="/products" className="flex items-center text-gray-600 hover:text-indigo-800 py-4 transition-all duration-300 hover:translate-x-1">
                         <span className="material-icons-outlined mr-2">tune</span>
-                        Some menu item
+                        Products
                         <span className="material-icons-outlined ml-auto">keyboard_arrow_right</span>
-                    </a>
-                    <a href="#" className="flex items-center text-gray-600 hover:text-indigo-800 py-4 transition-all duration-300 hover:translate-x-1">
+                    </Link>
+                    <Link to="/statuses" className="flex items-center text-gray-600 hover:text-indigo-800 py-4 transition-all duration-300 hover:translate-x-1">
                         <span className="material-icons-outlined mr-2">file_copy</span>
-                        Another menu item
+                        Statuses
                         <span className="material-icons-outlined ml-auto">keyboard_arrow_right</span>
-                    </a>
+                    </Link>
                 </div>
 
                 <div className="bg-white rounded-xl shadow-lg p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
