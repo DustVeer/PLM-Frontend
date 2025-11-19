@@ -1,6 +1,7 @@
 import ProductsApi from "../apis/products";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import StatusPillSmall from "../components/StatusPillSmall";
 
 function Products() {
     const [products, setProducts] = useState([]);
@@ -44,7 +45,7 @@ function Products() {
                         <div className="ml-auto">
                             <button
                                 onClick={() => navigate("/products/add")}
-                                className="px-4 py-2 rounded-md bg-emerald-600 text-white hover:cursor-pointer hover:bg-emerald-700 hover:scale-105 transform transition-all duration-150"
+                                className="btn-green"
                             >
                                 + Add Product
                             </button>
@@ -71,7 +72,10 @@ function Products() {
                                         <td className="px-6 py-3 text-sm text-gray-700">{index + 1}</td>
                                         <td className="px-6 py-3 text-sm text-gray-700">{product.name}</td>
                                         <td className="p-3 flex justify-start align-start">
-                                            <div style={{ backgroundColor: product.productStatus.statusColorHex }} className="p-3   text-sm text-gray-700 rounded-4xl ">{product.productStatus.name}</div>
+                                            <StatusPillSmall
+                                                label={product.productStatus?.name}
+                                                color={product.productStatus?.statusColorHex}
+                                            />
                                         </td>
                                         <td className="px-6 py-3 text-sm text-gray-700">{product.productCategory.name}</td>
                                         <td className="px-6 py-3 text-sm text-gray-700">{product.description}</td>

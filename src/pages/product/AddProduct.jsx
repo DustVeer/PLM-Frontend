@@ -59,12 +59,12 @@ export default function AddProduct() {
 		<div className="p-8 max-w-3xl mx-auto space-y-8 bg-white rounded-xl shadow-lg">
 			<button
 				onClick={() => navigate(-1)}
-				className="text-sm text-indigo-600 hover:underline hover:cursor-pointer"
+				className="text-link"
 			>
-				← Terug naar producten
+				← Back to Products
 			</button>
 
-			<h1 className="text-2xl font-bold text-gray-900">Product Toevoegen</h1>
+			<h1 className="text-2xl font-bold text-gray-900">Create New Product</h1>
 
 			{error && (
 				<div className="rounded-lg bg-red-50 text-red-700 p-3 text-sm">
@@ -76,7 +76,7 @@ export default function AddProduct() {
 				{/* Name */}
 				<div>
 					<label className="block text-sm font-medium text-gray-700">
-						Product Naam
+						Product Name
 					</label>
 					<input
 						type="text"
@@ -91,7 +91,7 @@ export default function AddProduct() {
 				{/* Description */}
 				<div>
 					<label className="block text-sm font-medium text-gray-700">
-						Beschrijving
+						Description
 					</label>
 					<textarea
 						name="description"
@@ -136,9 +136,9 @@ export default function AddProduct() {
 				<button
 					type="submit"
 					disabled={saving}
-					className="inline-flex items-center px-4 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 disabled:bg-indigo-300 hover:cursor-pointer transition hover:scale-105 transform duration-150"
+					className="btn-green "
 				>
-					{saving ? "Saving..." : "Product Toevoegen"}
+					{saving ? "Saving..." : "Save Product"}
 				</button>
 			</form>
 		</div>

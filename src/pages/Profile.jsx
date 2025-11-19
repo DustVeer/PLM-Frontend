@@ -239,7 +239,7 @@ export default function Profile() {
                             <button
                                 type="submit"
                                 disabled={loadingProfile || savingProfile}
-                                className="btn-save"
+                                className="btn-green"
                             >
                                 {savingProfile ? "Saving..." : "Save changes"}
                             </button>
@@ -335,7 +335,7 @@ export default function Profile() {
                             <button
                                 type="submit"
                                 disabled={savingPassword}
-                                className="btn-save"
+                                className="btn-green"
                             >
                                 {savingPassword ? "Saving..." : "Update password"}
                             </button>

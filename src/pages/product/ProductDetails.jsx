@@ -25,7 +25,6 @@ function ProductDetails() {
         setError(null);
         try {
 
-            console.log("Updating product with form data:", form);
             // Backend update
             const updated = await ProductsApi.update(id, {
                 name: form.name,
@@ -75,7 +74,7 @@ function ProductDetails() {
                 const data = await ProductsApi.getById(id);
                 setProduct(data);
 
-                const statusData = await StatusesApi.list();
+                const statusData = await StatusesApi.getByActive();
                 setStatuses(statusData);
 
 
@@ -105,7 +104,6 @@ function ProductDetails() {
             ...form,
             [e.target.name]: e.target.value,
         });
-        console.log("status", newStatus);
     }
 
     async function handleSave(e) {
@@ -125,6 +123,7 @@ function ProductDetails() {
             statusId: product.productStatus?.id ?? "",
         });
         setIsEditing(false);
+        
     }
 
     if (loading || !product || !form) {
@@ -194,14 +193,14 @@ function ProductDetails() {
                             <button
                                 onClick={handleSave}
                                 disabled={saving}
-                                className="px-4 py-2 text-sm rounded-md bg-green-600 text-white hover:bg-green-700 disabled:bg-green-300 hover:cursor-pointer hover:scale-105 transform transition-all duration-150"
+                                className="btn-green"
                             >
                                 {saving ? "Saving..." : "Save"}
                             </button>
                             <button
                                 type="button"
                                 onClick={handleCancelEdit}
-                                className="px-4 py-2 text-sm rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 hover:cursor-pointer hover:scale-105 transform transition-all duration-150"
+                                className="btn-cancel"
                             >
                                 Cancel
                             </button>
@@ -290,14 +289,13 @@ function ProductDetails() {
 
                             {/* Status ID (same here, can be select later) */}
                             <div className="flex flex-col gap-1">
-                                <label className="font-medium text-gray-700">Status ID</label>
+                                <label className="font-medium text-gray-700">Status</label>
                                 <input
-                                    type="number"
+                                    type="text"
                                     name="statusId"
-                                    value={form.statusId}
-                                    onChange={handleChange}
-                                    className="ps-1 py-1 mt-1 w-full rounded-md border-indigo-900 border-1 shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                                    className="ps-1 py-1 mt-1 w-full rounded-md border-indigo-900 border-1 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 disabled:bg-gray-200"
                                     required
+                                    value={product.productStatus?.name ?? "—"}
                                 />
                             </div>
 
@@ -317,19 +315,19 @@ function ProductDetails() {
                                 />
                             </div>
 
-                            {/* Secondary save/cancel at bottom (optional) */}
+                            {/* Secondary save/cancel at bottom */}
                             <div className="pt-2 flex gap-2">
                                 <button
                                     onClick={handleSave}
                                     disabled={saving}
-                                    className="px-4 py-2 text-sm rounded-md bg-green-600 text-white hover:bg-green-700 disabled:bg-green-300 hover:cursor-pointer hover:scale-105 transform transition-all duration-150"
+                                    className="btn-green"
                                 >
                                     {saving ? "Saving..." : "Save changes"}
                                 </button>
                                 <button
                                     type="button"
                                     onClick={handleCancelEdit}
-                                    className="px-4 py-2 text-sm rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 hover:cursor-pointer hover:scale-105 transform transition-all duration-150"
+                                    className="btn-cancel"
                                 >
                                     Cancel
                                 </button>
@@ -363,7 +361,7 @@ function ProductDetails() {
                         </h3>
                         <p>{product.updatedAt ? new Date(product.updatedAt).toLocaleString() : "—"}</p>
                         <div className="mt-3 text-sm space-y-1">
-                            <p className="text-gray-900">Updated By</p>
+                            <p className="text-gray-900">Last Updated By</p>
                             <p className="text-gray-900">
                                 Name: {product.updatedBy?.name ?? "Unknown"}
                             </p>

@@ -8,6 +8,8 @@ import Products from "../pages/Products";
 import RequireAuth from "../components/RequireAuth";
 import ProductDetails from "../pages/product/ProductDetails";
 import AddProduct from "../pages/product/AddProduct";
+import Statuses from "../pages/Statuses";
+import AddEditStatus from "../pages/status/AddEditStatus";
 
 export const RouterObjects = [
 	{
@@ -24,8 +26,11 @@ export const RouterObjects = [
 			{ path: "/", element: <Dashboard /> },
 			{ path: "/profile", element: <Profile /> },
 			{ path: "/products", element: <Products /> },
-			{ path: "/products/:id", element: <ProductDetails /> },
 			{ path: "/products/add", element: <AddProduct /> },
+			{ path: "/products/:id", element: <ProductDetails /> },
+			{ path: "/statuses", element: <Statuses /> },
+			{ path: "/statuses/add", element: <AddEditStatus /> },
+			{ path: "/statuses/:id/edit", element: <AddEditStatus /> },
 			{ path: "*", element: <NotFoundPage /> },
 		],
 	},

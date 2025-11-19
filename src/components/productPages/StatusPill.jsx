@@ -3,7 +3,8 @@ export default function StatusPill({ status, isCurrent, isBehind }) {
     if (!status) return null;
 
 
-    var bgColor = (isBehind || isCurrent) ? status.colorHexCode : "#E5E7EB";
+    var bgColor = (isBehind || isCurrent) ? status.statusColorHex : "#E5E7EB";
+
 
 
 
