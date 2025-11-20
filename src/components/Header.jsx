@@ -5,7 +5,7 @@ function Header() {
     
     return (
         <>
-            <header className="fixed w-full bg-white text-indigo-800 z-50 shadow-lg animate-slide-down">
+            <header className="fixed w-full bg-white text-indigo-800 z-50 shadow-lg animate-slide-down ">
                 <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between h-16">
                     <button className="mobile-menu-button p-2 lg:hidden" onClick={toggle}>
                         <span className="material-icons-outlined text-2xl">menu</span>
@@ -14,7 +14,7 @@ function Header() {
                         Poelman PLM
                     </div>
                     <div className="flex items-center space-x-2">
-                        <span className="material-icons-outlined p-2 text-2xl cursor-pointer hover:text-indigo-800 transition-transform duration-300 hover:scale-110 hidden md:block animation-bounce">notifications</span>
+                        <span className="material-icons-outlined p-2 text-2xl cursor-pointer hover:text-indigo-800 transition-transform duration-300 hover:scale-110 hidden md:block ">notifications</span>
                         
                     </div>
                 </div>

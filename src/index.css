@@ -8,6 +8,10 @@
   @apply inline-flex items-center rounded-lg bg-green-700 px-5 py-2 font-medium text-white shadow-sm hover:bg-green-800 disabled:opacity-60 disabled:cursor-not-allowed hover:scale-105 transition-transform duration-200 hover:cursor-pointer;
 }
 
+.btn-blue {
+  @apply inline-flex items-center rounded-lg bg-blue-600 px-5 py-2 font-medium text-white shadow-sm hover:bg-blue-800 disabled:opacity-60 disabled:cursor-not-allowed hover:scale-105 transition-transform duration-200 hover:cursor-pointer;
+}
+
 .form-input {
   @apply ps-1 py-1 mt-1 w-full rounded-md border-indigo-900 border-1 shadow-sm focus:ring-indigo-500 focus:border-indigo-500;
 

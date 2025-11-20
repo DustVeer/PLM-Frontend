@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import StatusPillSmall from "../../components/StatusPillSmall";
 import StatusesApi from "../../apis/statuses";
+import RequiredFieldsApi from "../../apis/requiredFields";
+
 
 const API_BASE = "/api/statuses";
 
@@ -17,31 +19,46 @@ export default function AddEditStatus() {
     description: "",
     statusColorHex: "#E5E7EB",
     sortOrder: 0,
-    active: true,
+    isActive: true,
+    requiredFieldIds: [],
   });
 
+
+  const [requiredFieldsOptions, setRequiredFieldsOptions] = useState([]);
+  const [requiredFieldsVisible, setRequiredFieldsVisible] = useState(false);
   const [loading, setLoading] = useState(isEditing);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
+
   useEffect(() => {
+    loadRequiredFields();
     if (!isEditing) return;
     loadStatus();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
+
+  async function loadRequiredFields() {
+    try {
+      const response = await RequiredFieldsApi.list();
+      setRequiredFieldsOptions(response);
+    } catch (err) {
+    }
+  }
 
   async function loadStatus() {
     try {
       setLoading(true);
       setError("");
       const response = await StatusesApi.get(id);
-     
+
       setForm({
         name: response.name ?? "",
         description: response.description ?? "",
         statusColorHex: response.statusColorHex ?? "#E5E7EB",
         sortOrder: response.sortOrder ?? 0,
-        active: response.active ?? true,
+        isActive: response.isActive ?? true,
+        requiredFieldIds: response.requiredFields.map(rf => rf.id) || [],
       });
 
     } catch (err) {
@@ -52,13 +69,24 @@ export default function AddEditStatus() {
   }
 
   function handleFormChange(e) {
+    console.log("Form: ", JSON.stringify(form));
     const { name, value, type, checked } = e.target;
     setForm((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
-    console.log("Form", form);
   }
+
+  function toggleRequired(fieldId, checked) {
+  setForm(prev => ({
+    ...prev,
+    requiredFieldIds: checked
+      ? [...prev.requiredFieldIds, fieldId]            // add id
+      : prev.requiredFieldIds.filter(id => id !== fieldId) // remove id
+  }));
+    
+
+}
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -71,7 +99,8 @@ export default function AddEditStatus() {
         description: form.description,
         statusColorHex: form.statusColorHex,
         sortOrder: Number(form.sortOrder) || 0,
-        active: form.active ? 1 : 0,
+        isActive: form.isActive ? 1 : 0, 
+        requiredFieldIds: form.requiredFieldIds || [],
       };
 
       var response;
@@ -88,7 +117,8 @@ export default function AddEditStatus() {
         description: response.description ?? "",
         statusColorHex: response.statusColorHex ?? "#E5E7EB",
         sortOrder: response.sortOrder ?? 0,
-        active: response.active ?? true,
+        isActive: response.isActive ?? true,
+        requiredFieldIds: response.requiredFieldIds || [],
       });
 
       navigate("/statuses");
@@ -105,11 +135,11 @@ export default function AddEditStatus() {
         <div className="flex items-center justify-between mb-4">
           <div>
             <button
-            onClick={() => navigate("/statuses")}
-            className="text-link"
-          >
-            ← Back to Statuses
-          </button>
+              onClick={() => navigate("/statuses")}
+              className="text-link"
+            >
+              ← Back to Statuses
+            </button>
             <h1 className="text-xl font-semibold text-gray-900 mt-4">
               {isEditing ? "Edit status" : "Create new status"}
             </h1>
@@ -119,7 +149,7 @@ export default function AddEditStatus() {
                 : "Define a new status that can be used on products."}
             </p>
           </div>
-          
+
         </div>
 
         {error && (
@@ -205,23 +235,8 @@ export default function AddEditStatus() {
               </div>
             </div>
 
-            <div className="flex items-center mt-2">
-              <input
-                id="active"
-                type="checkbox"
-                name="active"
-                checked={form.active}
-                onChange={handleFormChange}
-                className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-              />
-              <label
-                htmlFor="active"
-                className="ml-2 text-sm text-gray-700"
-              >
-                Status is active and available for products
-              </label>
-            </div>
 
+            {/* Status pill Preview */}
             <div className="mt-4">
               <span className="block text-xs font-medium text-gray-500 mb-1">
                 Preview
@@ -231,6 +246,62 @@ export default function AddEditStatus() {
                 color={form.statusColorHex}
               />
             </div>
+
+            {/* Show Required Fields Button */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Required fields
+              </label>
+
+
+              <div className="pt-2">
+                <button
+                  type="button"
+                  onClick={() => setRequiredFieldsVisible(!requiredFieldsVisible)}
+                  className="btn-blue text-sm"
+                >
+                  {requiredFieldsVisible ? "Hide" : "Show"}
+                </button>
+              </div>
+            </div>
+
+
+
+            {/* RequiredField list */}
+            {requiredFieldsVisible && (
+              <div>
+
+
+                <div className="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white">
+                  <div className="max-h-40 overflow-y-auto space-y-1">
+                    {requiredFieldsOptions.map((field) => {
+                      const checked = form.requiredFieldIds.includes(field.id);
+                      return (
+                        <label
+                          key={field.id}
+                          className="flex items-center gap-2 p-1 px-2 rounded hover:bg-gray-100 cursor-pointer"
+                        >
+                          <input
+                            type="checkbox"
+                            name="requiredFields"
+                            checked={checked}
+                            onChange={() => toggleRequired(field.id, !checked)}
+                            className="h-4 w-4 text-blue-600 rounded border-gray-300 hover:cursor-pointer"
+                          />
+                          <span className="text-sm text-gray-700">
+                            {field.fieldKey}
+                          </span>
+                        </label>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <p className="mt-2 text-xs text-gray-400">
+                  Select which fields must be completed when this status is active.
+                </p>
+              </div>
+            )}
 
             <div className="pt-4 flex justify-end gap-3">
               <button
@@ -251,8 +322,8 @@ export default function AddEditStatus() {
                     ? "Saving..."
                     : "Creating..."
                   : isEditing
-                  ? "Save changes"
-                  : "Create status"}
+                    ? "Save changes"
+                    : "Create status"}
               </button>
             </div>
           </form>
