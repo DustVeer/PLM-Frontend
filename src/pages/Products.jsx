@@ -27,7 +27,7 @@ function Products() {
 
                             <input
                                 type="text"
-                                placeholder="Product zoeken..."
+                                placeholder="Search for product..."
                                 className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
 
@@ -71,13 +71,14 @@ function Products() {
                                     <tr key={product.id} onClick={() => navigate(`/products/${product.id}`)} className="hover:bg-indigo-200 hover:cursor-pointer transition-colors duration-100">
                                         <td className="px-6 py-3 text-sm text-gray-700">{index + 1}</td>
                                         <td className="px-6 py-3 text-sm text-gray-700">{product.name}</td>
+                                       
                                         <td className="p-3 flex justify-start align-start">
                                             <StatusPillSmall
-                                                label={product.productStatus?.name}
-                                                color={product.productStatus?.statusColorHex}
+                                                label={product.statusName}
+                                                color={product.statusColorHex}
                                             />
                                         </td>
-                                        <td className="px-6 py-3 text-sm text-gray-700">{product.productCategory.name}</td>
+                                        <td className="px-6 py-3 text-sm text-gray-700">{product.categoryName}</td>
                                         <td className="px-6 py-3 text-sm text-gray-700">{product.description}</td>
                                         <td className="px-6 py-3 text-sm text-gray-700">{product.createdAt}</td>
                                         <td className="px-6 py-3 text-sm text-gray-700">{product.updatedAt}</td>

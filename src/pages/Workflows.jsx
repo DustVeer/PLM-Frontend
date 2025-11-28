@@ -17,23 +17,23 @@ export default function Workflows() {
         loadWorkflows();
     }, []);
 
-   async function toggleActive(wf) {
-           try {
-               setError("");
+    async function toggleActive(wf) {
+        try {
+            setError("");
 
-               console.log("Toggling active for workflow:", wf);
-   
-               const response = await WorkflowsApi.toggleActive(wf.id);
+            console.log("Toggling active for workflow:", wf);
 
-               console.log("Toggle active response:", response);
-   
-               setWorkflows((prev) =>
-                   prev.map((w) => (w.id === wf.id ? response : w))
-               );
-           } catch (err) {
-               setError(err.message || "Failed to update status");
-           }
-       }
+            const response = await WorkflowsApi.toggleActive(wf.id);
+
+            console.log("Toggle active response:", response);
+
+            setWorkflows((prev) =>
+                prev.map((w) => (w.id === wf.id ? response : w))
+            );
+        } catch (err) {
+            setError(err.message || "Failed to update status");
+        }
+    }
 
     async function loadWorkflows() {
         try {
@@ -46,6 +46,21 @@ export default function Workflows() {
             setError(err.message || "Failed to load workflows");
         } finally {
             setLoading(false);
+        }
+    }
+
+
+    async function handleDelete(workflow) {
+        if (!window.confirm(`Are you sure you want to delete workflow "${workflow.name}"?`)) {
+            return;
+        }
+
+        try {
+            setError("");
+            await WorkflowsApi.delete(workflow.id);
+            setWorkflows((prev) => prev.filter((w) => w.id !== workflow.id));
+        } catch (err) {
+            setError(err.message || "Failed to delete workflow");
         }
     }
 
@@ -240,16 +255,16 @@ export default function Workflows() {
                                         <td className="px-4 py-3 text-sm">
                                             <button
                                                 onClick={() => toggleActive(wf)}
-                                                className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${wf.active
+                                                className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${wf.isActive
                                                     ? "bg-green-50 text-green-700 border-green-200 hover:cursor-pointer hover:scale-125 duration-150 "
                                                     : "bg-gray-50 text-gray-500 border-gray-200 hover:cursor-pointer hover:scale-125 duration-150 "
                                                     }`}
                                             >
                                                 <span
-                                                    className={`mr-2 inline-block h-2 w-2 rounded-full ${wf.active ? "bg-green-500" : "bg-gray-400"
+                                                    className={`mr-2 inline-block h-2 w-2 rounded-full ${wf.isActive ? "bg-green-500" : "bg-gray-400"
                                                         }`}
                                                 />
-                                                {wf.active ? "Active" : "Inactive"}
+                                                {wf.isActive ? "Active" : "Inactive"}
                                             </button>
                                         </td>
 
@@ -257,12 +272,20 @@ export default function Workflows() {
                                         <td className="py-3 px-4 align-top text-xs text-gray-500">
                                             {formatDate(wf.updatedAt)}
                                         </td>
+
+                                        {/* WF-Actions */}
                                         <td className="py-3 pl-4 align-top text-right">
                                             <button
                                                 onClick={() => navigate(`/workflows/${wf.id}`)}
-                                                className="text-link text-sm"
+                                                className="text-link text-sm me-2"
                                             >
                                                 Edit
+                                            </button>
+                                            <button
+                                                onClick={() => handleDelete(wf)}
+                                                className="text-link-red"
+                                            >
+                                                Delete
                                             </button>
                                         </td>
                                     </tr>

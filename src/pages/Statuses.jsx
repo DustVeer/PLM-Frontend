@@ -38,8 +38,8 @@ export default function StatusListPage() {
     const filteredStatuses = useMemo(() => {
         return statuses
             .filter((s) => {
-                if (filter === "active") return s.active;
-                if (filter === "inactive") return !s.active;
+                if (filter === "active") return s.isActive;
+                if (filter === "inactive") return !s.isActive;
                 return true;
             })
             .filter((s) => {
@@ -70,7 +70,7 @@ export default function StatusListPage() {
     async function toggleActive(status) {
         try {
             setError("");
-            const updated = { ...status, isActive: !status.isActive ? 1 : 0 };
+            const updated = { ...status, isActive: status.isActive ? 0 : 1 };
 
             const response = await StatusesApi.update(status.id, updated);
 

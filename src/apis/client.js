@@ -17,8 +17,14 @@ async function request(path, options = {}) {
     console.log("path", path);
     console.log("options", options);
 
+    let url = `${BASE_URL}${path}`;
+    if (options.params) {
+        const qs = new URLSearchParams(options.params).toString();
+        url += `?${qs}`;
+    }
+
     try {
-        res = await fetch(`${BASE_URL}${path}`, {
+        res = await fetch(url, {
             headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}`, ...(options.headers || {}) },
             ...options,
         })
@@ -43,7 +49,7 @@ async function request(path, options = {}) {
 }
 
 export const api = {
-    get: (path) => request(path),
+    get: (path, options) => request(path, options),
     post: (path, body) =>
         request(path, { method: "POST", body: JSON.stringify(body) }),
     put: (path, body) =>

@@ -1,6 +1,6 @@
 import { use, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getStoredUser } from "../../context/AuthContext";
+import { getStoredUserId } from "../../context/AuthContext";
 import ProductsApi from "../../apis/products";
 import StatusesApi from "../../apis/statuses";
 import StatusPill from "../../components/productPages/StatusPill";
@@ -8,16 +8,52 @@ import StatusPill from "../../components/productPages/StatusPill";
 function ProductDetails() {
     const { id } = useParams();
     const navigate = useNavigate();
-    const userId = JSON.parse(getStoredUser());
+    const userId = JSON.parse(getStoredUserId());
 
     const [product, setProduct] = useState(null);
-    const [newStatus, setNewStatus] = useState(null);
-    const [statuses, setStatuses] = useState([]);
+    const [newStatusId, setNewStatusId] = useState(null);
     const [form, setForm] = useState(null);
+    const [requiredFields, setRequiredFields] = useState(null);
+
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
+
+    // Load product details on mount
+    useEffect(() => {
+
+        async function fetchProductData() {
+            setError(null);
+            setLoading(true);
+            setIsEditing(false);
+
+            try {
+                const productData = await ProductsApi.getById(id);
+                setProduct(productData);
+
+                setForm({
+                    name: productData.name || "",
+                    description: productData.description || "",
+                    categoryId: productData.productCategory?.id ?? "",
+                    statusId: productData.productStatus?.id ?? "",
+                    updatedBy: productData.updatedBy?.id || "",
+                    workflow: productData.workflow || "",
+                    colour: productData.colour || "",
+                    price: productData.price || "",
+
+                });
+            } catch (err) {
+                setError(err.message || "Failed to load product details.");
+            } finally {
+                setLoading(false);
+            }
+        }
+        fetchProductData();
+
+
+    }, [id]);
+
 
     // Function to update product details
     async function updateProduct() {
@@ -31,7 +67,9 @@ function ProductDetails() {
                 description: form.description,
                 categoryId: parseInt(form.categoryId),
                 statusId: parseInt(form.statusId),
-                updatedBy: userId
+                updatedById: userId,
+                colour: form.colour,
+                price: parseFloat(form.price),
             });
 
             setProduct(updated);
@@ -41,7 +79,10 @@ function ProductDetails() {
                 description: updated.description || "",
                 categoryId: updated.productCategory?.id ?? "",
                 statusId: updated.productStatus?.id ?? "",
-                updatedBy: userId
+                updatedById: userId,
+                workflow: updated.workflow || "",
+                colour: updated.colour || "",
+                price: updated.price || "",
             });
             setIsEditing(false);
         } catch (err) {
@@ -51,51 +92,30 @@ function ProductDetails() {
         }
     }
 
-    useEffect(() => {
-        if (newStatus && form) {
-            setForm({
-                ...form,
-                statusId: newStatus,
-            });
 
+    async function handelStatusChange(statusId) {
+        if (!statusId || !product) return;
+        setSaving(true);
+        setError(null);
+
+        try {
+            const updated = await ProductsApi.changeStatus(id, statusId);
+            setProduct(updated);
+
+            setSaving(false);
+        } catch (err) {
+            console.error("Error changing status:", err.body);
+
+            let message = err.body?.message || "Failed to change status.";
+            let missing = err.body?.missingRequiredFields || [];
+
+            setError({ message, missing });
+
+            setSaving(false);
         }
-        setIsEditing(true);
-    }, [newStatus]);
 
-    // Load product details on mount
-    useEffect(() => {
-
-        async function fetchProductData() {
-            setError(null);
-            setLoading(true);
-            setIsEditing(false);
-
-            try {
-                const data = await ProductsApi.getById(id);
-                setProduct(data);
-
-                const statusData = await StatusesApi.getByActive();
-                setStatuses(statusData);
-
-
-                setForm({
-                    name: data.name || "",
-                    description: data.description || "",
-                    categoryId: data.productCategory?.id ?? "",
-                    statusId: data.productStatus?.id ?? "",
-                    updatedBy: data.updatedBy?.id || "",
-                });
-            } catch (err) {
-                setError(err.message || "Failed to load product details.");
-            } finally {
-                setLoading(false);
-            }
-        }
-        fetchProductData();
-
-
-    }, [id]);
-
+        console.log("newStatusId changed:", newStatusId);
+    }
 
 
 
@@ -115,15 +135,8 @@ function ProductDetails() {
 
 
     function handleCancelEdit() {
-        if (!product) return;
-        setForm({
-            name: product.name || "",
-            description: product.description || "",
-            categoryId: product.productCategory?.id ?? "",
-            statusId: product.productStatus?.id ?? "",
-        });
         setIsEditing(false);
-        
+
     }
 
     if (loading || !product || !form) {
@@ -138,7 +151,7 @@ function ProductDetails() {
         <div className="p-8 space-y-3">
             {/* Back button */}
             <button
-                onClick={() => navigate(-1)}
+                onClick={() => navigate("/products")}
                 className="text-sm text-indigo-600 hover:underline hover:cursor-pointer"
             >
                 ← Back to products
@@ -160,14 +173,14 @@ function ProductDetails() {
                 {/* Statuses pils */}
                 <div className="flex items-center">
 
-                    {statuses?.map((status, index) => {
-                        const isLatest = index === statuses.length - 1;
+                    {product.workflow.statuses?.map((status, index) => {
+                        const isLatest = index === product.workflow.statuses.length - 1;
                         const isCurrent = product.productStatus && (status.id === product.productStatus.id);
                         const isBehind = product.productStatus && (status.id < product.productStatus.id);
 
                         return (
-                            <div key={index} className="flex items-center gap-1" onClick={() => setNewStatus(status.id)}>
-                                <button className="flex items-center"  >
+                            <div key={index} className="flex items-center gap-1">
+                                <button className="flex items-center"  onClick={() => handelStatusChange(status.id)}>
                                     <StatusPill status={status} isCurrent={isCurrent} isBehind={isBehind} />
                                 </button>
                                 {!isLatest && (
@@ -209,9 +222,17 @@ function ProductDetails() {
                 </div>
             </div>
 
+            {/* Error message */}
             {error && (
                 <div className="rounded-md bg-red-50 text-red-700 text-sm p-3">
-                    {error}
+                    {error.message}
+                    {error.missing && error.missing.length > 0 && (
+                        <ul className="mt-2 list-disc list-inside">
+                            {error.missing.map((field, index) => (
+                                <li key={index}>{field}</li>
+                            ))}
+                        </ul>
+                    )}
                 </div>
             )}
 
@@ -245,12 +266,27 @@ function ProductDetails() {
                                 </dd>
                             </div>
                             <hr className="text-gray-300" />
-                            <div>
+                            <div className={`flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 ${error?.missing?.includes("colour") ? "bg-red-100 p-2 rounded-md shadow-sm" : ""}`}>
+                                <dt>Colour</dt>
+                                <dd className={`font-medium `}>
+                                    {product.colour || "—"}
+                                </dd>
+                            </div>
+                            <hr className="text-gray-300" />
+                            <div className={`flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 ${error?.missing?.includes("price") ? "bg-red-100 p-2 rounded-md shadow-sm" : ""}`}>
+                                <dt>Price</dt>
+                                <dd className={`font-medium `}>
+                                    {product.price || "—"}
+                                </dd>
+                            </div>
+                            <hr className="text-gray-300" />
+                            <div className={`flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 ${error?.missing?.includes("description") ? "bg-red-100 p-2 rounded-md shadow-sm" : ""}`}>
                                 <dt className="mb-1">Description</dt>
                                 <dd className="text-gray-800 whitespace-pre-line">
                                     {product.description || "No description provided."}
                                 </dd>
                             </div>
+
                         </dl>
                     ) : (
                         // EDIT MODE
@@ -270,36 +306,55 @@ function ProductDetails() {
 
                             <hr className="text-gray-300" />
 
-                            {/* Category ID (could be turned into a select later) */}
+                            {/* Category */}
                             <div className="flex flex-col gap-1">
-                                <label className="font-medium text-gray-700">
-                                    Category ID
+                                <label className="font-medium text-gray-700 ">
+                                    Category
                                 </label>
-                                <input
-                                    type="number"
-                                    name="categoryId"
-                                    value={form.categoryId}
-                                    onChange={handleChange}
-                                    className="ps-1 py-1 mt-1 w-full rounded-md border-indigo-900 border-1 shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-                                    required
-                                />
+                                <button
+                                    type="button"
+                                    onClick={() => navigate(`/products/${product.id}/category`)}
+                                    className="text-smhover:underline hover:cursor-pointer mb-1 bg-blue-500 text-white px-2 py-1 rounded-md w-max"
+                                >
+                                    Change Category
+                                </button>
                             </div>
 
                             <hr className="text-gray-300" />
 
-                            {/* Status ID (same here, can be select later) */}
+
+                            {/* Colour */}
                             <div className="flex flex-col gap-1">
-                                <label className="font-medium text-gray-700">Status</label>
+                                <label className="font-medium text-gray-700">Colour</label>
                                 <input
                                     type="text"
-                                    name="statusId"
+                                    name="colour"
+                                    value={form.colour}
+                                    onChange={handleChange}
                                     className="ps-1 py-1 mt-1 w-full rounded-md border-indigo-900 border-1 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 disabled:bg-gray-200"
                                     required
-                                    value={product.productStatus?.name ?? "—"}
+                                />
+                            </div>
+
+                             <hr className="text-gray-300" />
+
+
+                            {/* Price */}
+                            <div className="flex flex-col gap-1">
+                                <label className="font-medium text-gray-700">Price</label>
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    name="price"
+                                    value={form.price}
+                                    onChange={handleChange}
+                                    className="ps-1 py-1 mt-1 w-full rounded-md border-indigo-900 border-1 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 disabled:bg-gray-200"
+                                    required
                                 />
                             </div>
 
                             <hr className="text-gray-300" />
+
 
                             {/* Description */}
                             <div className="flex flex-col gap-1">

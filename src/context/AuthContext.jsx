@@ -23,7 +23,7 @@ function setStoredToken(token, remember) {
 }
 
 //Saves the user just like the token functions
-export function getStoredUser() {
+export function getStoredUserId() {
     return localStorage.getItem(USER_KEY) ?? sessionStorage.getItem(USER_KEY) ?? null;
 }
 
@@ -48,7 +48,7 @@ function clearStoredUser() {
 
 export function AuthProvider({ children }) {
     const [token, setToken] = useState(() => getStoredToken());
-    const [user, setUser] = useState(() => getStoredUser());
+    const [user, setUser] = useState(() => getStoredUserId());
 
 
     useEffect(() => {
