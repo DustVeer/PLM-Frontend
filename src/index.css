@@ -28,3 +28,40 @@
 .text-link-red {
   @apply text-sm text-red-600 hover:text-red-800 hover:cursor-pointer hover:underline;
 }
+
+@keyframes garlandGlow {
+
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.85;
+  }
+
+  50% {
+    transform: translateY(1px);
+    opacity: 1;
+  }
+}
+
+@keyframes garlandSwing {
+  0% {
+    transform: rotate(-3deg);
+  }
+
+  50% {
+    transform: rotate(3deg);
+  }
+
+  100% {
+    transform: rotate(-3deg);
+  }
+}
+
+.garland-glow {
+  animation: garlandGlow 1.6s ease-in-out infinite;
+}
+
+.garland-swing {
+  animation: garlandSwing 3s ease-in-out infinite;
+  transform-origin: top center;
+}
