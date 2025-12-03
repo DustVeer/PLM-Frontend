@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import UsersApi from "../apis/users";
-import { getStoredUser } from "../context/AuthContext";
+import { getStoredUserId } from "../context/AuthContext";
 
 
 export default function Profile() {
-    const userId = JSON.parse(getStoredUser());
+    const userId = JSON.parse(getStoredUserId());
 
     const [profileForm, setProfileForm] = useState({
         name: "",

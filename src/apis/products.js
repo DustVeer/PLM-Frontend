@@ -5,6 +5,7 @@ export const ProductsApi = {
   list: () => api.get(`/products`),
   create: (dto) => api.post(`/products`, dto),
   update: (id, dto) => api.put(`/products/${id}`, dto),
+  changeStatus: (id, statusId) => api.put(`/products/${id}/status/${statusId}`),
   delete: (id) => api.del(`/products/${id}`)
 };
 

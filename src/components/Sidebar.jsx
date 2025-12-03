@@ -4,8 +4,8 @@ import { useAuth } from "../context/AuthContext";
 
 function Sidebar() {
     const { isOpen } = useSidebar();
-    const {logout } = useAuth();
-    
+    const { logout } = useAuth();
+
     const handleLogOut = () => {
         logout();
     };
@@ -23,9 +23,23 @@ function Sidebar() {
                         Products
                         <span className="material-icons-outlined ml-auto">keyboard_arrow_right</span>
                     </Link>
+
+                </div>
+
+                <div className="bg-white rounded-xl shadow-lg mb-6 p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
                     <Link to="/statuses" className="flex items-center text-gray-600 hover:text-indigo-800 py-4 transition-all duration-300 hover:translate-x-1">
                         <span className="material-icons-outlined mr-2">file_copy</span>
                         Statuses
+                        <span className="material-icons-outlined ml-auto">keyboard_arrow_right</span>
+                    </Link>
+                    <Link to="/workflows" className="flex items-center text-gray-600 hover:text-indigo-800 py-4 transition-all duration-300 hover:translate-x-1">
+                        <span className="material-symbols-outlined mr-2">conversion_path</span>
+                        WorkFLows
+                        <span className="material-icons-outlined ml-auto">keyboard_arrow_right</span>
+                    </Link>
+                    <Link to="/statuses" className="flex items-center text-gray-600 hover:text-indigo-800 py-4 transition-all duration-300 hover:translate-x-1">
+                        <span className="material-symbols-outlined mr-2">view_timeline</span>
+                        Templates
                         <span className="material-icons-outlined ml-auto">keyboard_arrow_right</span>
                     </Link>
                 </div>
