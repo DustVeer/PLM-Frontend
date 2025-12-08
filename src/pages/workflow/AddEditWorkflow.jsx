@@ -44,7 +44,6 @@ export default function AddEditWorkflow() {
       const response = await StatusesApi.list();
       setAllStatuses(response || []);
     } catch (err) {
-      console.error("Failed to load statuses", err);
     }
   }
 

@@ -1,6 +1,7 @@
 import { getStoredToken } from "../context/AuthContext";
 
-const BASE_URL = "http://localhost:8080/api";
+
+const BASE_URL = import.meta.env.VITE_API_URL + "/api";
 
 export class ApiError extends Error {
     constructor(message, status, body) {
@@ -14,8 +15,6 @@ export class ApiError extends Error {
 async function request(path, options = {}) {
     const token = getStoredToken(); 
     let res;
-    console.log("path", path);
-    console.log("options", options);
 
     let url = `${BASE_URL}${path}`;
     if (options.params) {

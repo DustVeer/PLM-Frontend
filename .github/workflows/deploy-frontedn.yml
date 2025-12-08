@@ -1,0 +1,26 @@
+name: Deploy Frontend to Raspberry Pi
+
+on:
+  push:
+    branches:
+      - main   
+  workflow_dispatch:
+
+jobs:
+  deploy-frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Deploy to Raspberry Pi via SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.PI_HOST }}
+          username: ${{ secrets.PI_USER }}
+          key: ${{ secrets.PI_SSH_KEY }}
+          port: 22
+          script: |
+            echo "[CI] Running deploy script on Pi..."
+            /home/dustveer/deploy-frontend.sh

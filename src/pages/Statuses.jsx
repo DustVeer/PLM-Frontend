@@ -27,7 +27,6 @@ export default function StatusListPage() {
             const response = await StatusesApi.list();
             setStatuses(Array.isArray(response) ? response : []);
 
-            console.log("Fetched statuses:", response);
         } catch (err) {
             setError(err.message || "Failed to load statuses");
         } finally {

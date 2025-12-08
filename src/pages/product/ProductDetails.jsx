@@ -104,7 +104,6 @@ function ProductDetails() {
 
             setSaving(false);
         } catch (err) {
-            console.error("Error changing status:", err.body);
 
             let message = err.body?.message || "Failed to change status.";
             let missing = err.body?.missingRequiredFields || [];
@@ -114,7 +113,6 @@ function ProductDetails() {
             setSaving(false);
         }
 
-        console.log("newStatusId changed:", newStatusId);
     }
 
 

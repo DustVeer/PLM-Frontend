@@ -36,7 +36,6 @@ export default function Profile() {
 
                 const response = await UsersApi.getById(userId);
 
-                console.log("Fetched profile data:", response);
 
                 //Adjust field names if your backend is different
                 setProfileForm({
@@ -63,7 +62,6 @@ export default function Profile() {
             ...prev,
             [name]: value,
         }));
-        console.log("Profile form set to:", profileForm);
 
     }
 
