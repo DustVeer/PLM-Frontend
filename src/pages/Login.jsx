@@ -18,19 +18,20 @@ function Login() {
         setError("");
         setLoading(true);
         try {
-            const res = await login(email, password, remember);
+            await login(email, password, remember);
             navigate("/");
             setLoading(false);
         } catch (error) {
             setLoading(false);
 
-            if (!error.response) {
+            if (!error.status) {
                 setError("Cannot reach server. Please check your connection.");
                 setLoading(false);
                 return;
             }
 
-            const { status } = error.response;
+            const { status } = error;
+            console.log("Login error status:", status);
 
             if (status >= 500) {
                 // Cloudflare 502 / 520 / backend 500 etc.
