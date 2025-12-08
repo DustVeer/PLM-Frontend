@@ -4,7 +4,7 @@ import { AuthProvider } from "./context/AuthContext";
 import ChristmasGarland from "./components/temp/ChristmasGarland";
 
 
-const router = createBrowserRouter(RouterObjects, {basename:"/PLM-Frontend"});
+const router = createBrowserRouter(RouterObjects);
 
 
 function App() {
