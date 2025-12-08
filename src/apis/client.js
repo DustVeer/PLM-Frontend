@@ -15,8 +15,6 @@ export class ApiError extends Error {
 async function request(path, options = {}) {
     const token = getStoredToken(); 
     let res;
-    console.log("path", path);
-    console.log("options", options);
 
     let url = `${BASE_URL}${path}`;
     if (options.params) {

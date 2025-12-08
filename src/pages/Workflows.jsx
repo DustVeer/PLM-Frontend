@@ -21,11 +21,7 @@ export default function Workflows() {
         try {
             setError("");
 
-            console.log("Toggling active for workflow:", wf);
-
             const response = await WorkflowsApi.toggleActive(wf.id);
-
-            console.log("Toggle active response:", response);
 
             setWorkflows((prev) =>
                 prev.map((w) => (w.id === wf.id ? response : w))

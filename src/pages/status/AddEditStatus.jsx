@@ -69,7 +69,6 @@ export default function AddEditStatus() {
   }
 
   function handleFormChange(e) {
-    console.log("Form: ", JSON.stringify(form));
     const { name, value, type, checked } = e.target;
     setForm((prev) => ({
       ...prev,

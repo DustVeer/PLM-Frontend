@@ -98,7 +98,6 @@ export default function AddProductPage() {
       // Replace with your real API call, for example:
       // await ProductApi.create(body);
 
-      console.log("Submitting product:", body);
 
       setSuccessMessage("Product created successfully.");
       setForm({
@@ -112,7 +111,6 @@ export default function AddProductPage() {
       });
       setErrors({});
     } catch (err) {
-      console.error(err);
       setErrors((prev) => ({
         ...prev,
         submit: "Something went wrong while creating the product.",

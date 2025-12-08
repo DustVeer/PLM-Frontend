@@ -31,7 +31,6 @@ function ProductCategorySelectPage() {
                 const p = await ProductsApi.getById(id);
                 setProduct(p);
             } catch (err) {
-                console.error("Failed to load product", err);
                 setError("Failed to load product.");
             } finally {
                 setLoadingProduct(false);
@@ -78,7 +77,6 @@ function ProductCategorySelectPage() {
 
                 setHasMore(!isLast);
             } catch (err) {
-                console.error("Failed to load categories", err);
                 setError("Failed to load categories.");
             } finally {
                 setLoadingCategories(false);
@@ -108,7 +106,6 @@ function ProductCategorySelectPage() {
             setProduct(updated);
             navigate(`/products/${id}`);
         } catch (err) {
-            console.error("Failed to update product category", err);
             setError("Failed to update product category.");
         } finally {
             setSaving(false);
