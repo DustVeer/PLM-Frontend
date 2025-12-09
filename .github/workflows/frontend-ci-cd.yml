@@ -41,9 +41,5 @@ jobs:
           key: ${{ secrets.PI_SSH_KEY }}      # private key for that user
           port: ${{ secrets.PI_PORT }}        # e.g. 22
           script: |
-            cd /home/${{ secrets.PI_USER }}/frontend   # <-- adjust to your project path on the Pi
-            git pull origin main                      # pull latest code
-            npm install                               # install/update deps
-            npm run build                             # build frontend on the Pi
-            # Optional: restart your service / Caddy etc.
-            # sudo systemctl restart my-frontend.service
+            echo "[CI] Running deploy script on Pi..."
+            /home/dustveer/deploy-frontend.sh
