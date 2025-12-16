@@ -6,12 +6,11 @@ export default function StatusPill({ status, isCurrent, isBehind }) {
     var bgColor = (isBehind || isCurrent) ? status.statusColorHex : "#E5E7EB";
 
 
-
-
     return (
         <div className={`relative inline-block group hover:cursor-pointer hover:scale-105 transition-transform duration-150" `}>
             {/* The pill itself */}
             <div
+                data-testid="status-pill"
                 className={`p-4 rounded-full font-medium text-lg ${isBehind ? "opacity-40" : ""}`}
                 style={{ backgroundColor: bgColor, color: "black", }}
             >
@@ -20,6 +19,7 @@ export default function StatusPill({ status, isCurrent, isBehind }) {
 
             {/* Tooltip */}
             <div
+                data-testid="status-tooltip"
                 className="
           pointer-events-none
           absolute left-1/2 top-xl mt-2 -translate-x-1/2
@@ -32,7 +32,7 @@ export default function StatusPill({ status, isCurrent, isBehind }) {
             >
                 <div className="flex justify-center flex-col items-center space-y-2">
                     <p className="text-black text-2xl">{status.description || "No description available."}</p>
-                     <p className="text-lg">Click to set status</p> 
+                    <p className="text-lg">Click to set status</p>
                 </div>
 
             </div>

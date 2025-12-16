@@ -13,7 +13,7 @@ export class ApiError extends Error {
 }
 
 async function request(path, options = {}) {
-    const token = getStoredToken(); 
+    const token = getStoredToken();
     let res;
 
     let url = `${BASE_URL}${path}`;

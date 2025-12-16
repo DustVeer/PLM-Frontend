@@ -2,12 +2,12 @@ name: Frontend CI/CD
 
 on:
   push:
-    branches: [ "main" ]   
-  workflow_dispatch:        
+    branches: ["main"]
+  workflow_dispatch:
 
 jobs:
-  ci:
-    name: CI – Build frontend
+  test:
+    name: CI – Run frontend tests
     runs-on: ubuntu-latest
 
     steps:
@@ -17,29 +17,50 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: "22"          
+          node-version: "22"
           cache: "npm"
 
       - name: Install dependencies
         run: npm install
 
-      - name: Build (no tests yet)
+      - name: Run tests
+        run: npm test
+
+  ci:
+    name: CI – Build frontend
+    runs-on: ubuntu-latest
+    needs: test   
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
         run: npm run build
 
   deploy:
     name: CD – Deploy to Raspberry Pi
     runs-on: ubuntu-latest
-    needs: ci                       # only run if CI (build) passed
-    if: github.ref == 'refs/heads/main'   # only deploy from main
+    needs: ci
+    if: github.ref == 'refs/heads/main'
 
     steps:
       - name: Deploy to Pi over SSH
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: ${{ secrets.PI_HOST }}        # e.g. 192.168.1.50 or your domain
-          username: ${{ secrets.PI_USER }}    # e.g. ubuntu or pi
-          key: ${{ secrets.PI_SSH_KEY }}      # private key for that user
-          port: ${{ secrets.PI_PORT }}        # e.g. 22
+          host: ${{ secrets.PI_HOST }}
+          username: ${{ secrets.PI_USER }}
+          key: ${{ secrets.PI_SSH_KEY }}
+          port: ${{ secrets.PI_PORT }}
           script: |
             echo "[CI] Running deploy script on Pi..."
             /home/dustveer/deploy-frontend.sh

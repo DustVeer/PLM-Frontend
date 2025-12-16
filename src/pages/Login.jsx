@@ -31,7 +31,6 @@ function Login() {
             }
 
             const { status } = error;
-            console.log("Login error status:", status);
 
             if (status >= 500) {
                 // Cloudflare 502 / 520 / backend 500 etc.
@@ -54,7 +53,7 @@ function Login() {
         <>
             <div className="flex justify-center align-middle mt-50">
                 <div className="bg-white rounded-xl shadow-lg p-6 w-100" >
-                    <h3 className="text-3xl font-bold text-indigo-800">Login CD worked</h3>
+                    <h3 className="text-3xl font-bold text-indigo-800">Login</h3>
                     <form action="" onSubmit={handleSubmit} className="pt-4 space-y-4">
                         <div className="pt-2">
                             <input placeholder="Email" type="text" className="w-full rounded-xl p-2.5 border-violet-300 border-2"
