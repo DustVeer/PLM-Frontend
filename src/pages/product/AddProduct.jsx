@@ -179,11 +179,10 @@ export default function AddProductPage() {
                 value={form.name}
                 onChange={handleChange}
                 placeholder="e.g. Leather Chelsea boot"
-                className={`w-full rounded-xl border px-3 py-2.5 text-sm bg-slate-50 dark:bg-slate-950/60 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 ${
-                  errors.name
+                className={`w-full rounded-xl border px-3 py-2.5 text-sm bg-slate-50 dark:bg-slate-950/60 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 ${errors.name
                     ? "border-rose-400 focus:ring-rose-500 focus:border-rose-500"
                     : "border-slate-200 dark:border-slate-700"
-                }`}
+                  }`}
               />
               {errors.name && (
                 <p className="mt-1 text-xs text-rose-500">{errors.name}</p>
@@ -199,11 +198,10 @@ export default function AddProductPage() {
                 name="categoryId"
                 value={form.categoryId}
                 onChange={handleChange}
-                className={`w-full rounded-xl border px-3 py-2.5 text-sm bg-slate-50 dark:bg-slate-950/60 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 ${
-                  errors.categoryId
+                className={`w-full rounded-xl border px-3 py-2.5 text-sm bg-slate-50 dark:bg-slate-950/60 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 ${errors.categoryId
                     ? "border-rose-400 focus:ring-rose-500 focus:border-rose-500"
                     : "border-slate-200 dark:border-slate-700"
-                }`}
+                  }`}
               >
                 <option value="">Select category…</option>
                 {renderOptions(categories)}
@@ -224,11 +222,10 @@ export default function AddProductPage() {
                 name="statusId"
                 value={form.statusId}
                 onChange={handleChange}
-                className={`w-full rounded-xl border px-3 py-2.5 text-sm bg-slate-50 dark:bg-slate-950/60 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 ${
-                  errors.statusId
+                className={`w-full rounded-xl border px-3 py-2.5 text-sm bg-slate-50 dark:bg-slate-950/60 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 ${errors.statusId
                     ? "border-rose-400 focus:ring-rose-500 focus:border-rose-500"
                     : "border-slate-200 dark:border-slate-700"
-                }`}
+                  }`}
               >
                 <option value="">Select status…</option>
                 {renderOptions(statuses)}
@@ -269,11 +266,10 @@ export default function AddProductPage() {
                 value={form.price}
                 onChange={handleChange}
                 placeholder="e.g. 79.95"
-                className={`w-full rounded-xl border px-3 py-2.5 text-sm bg-slate-50 dark:bg-slate-950/60 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 ${
-                  errors.price
+                className={`w-full rounded-xl border px-3 py-2.5 text-sm bg-slate-50 dark:bg-slate-950/60 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 ${errors.price
                     ? "border-rose-400 focus:ring-rose-500 focus:border-rose-500"
                     : "border-slate-200 dark:border-slate-700"
-                }`}
+                  }`}
               />
               {errors.price && (
                 <p className="mt-1 text-xs text-rose-500">{errors.price}</p>
