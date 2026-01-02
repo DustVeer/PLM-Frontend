@@ -43,6 +43,13 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+        
+      - name: Fail if dist contains test-base
+        run: |
+          if grep -R "test-base" -n dist; then
+          echo "ERROR: test-base found in dist"
+          exit 1
+            fi
 
       - name: Build
         run: npm run build
