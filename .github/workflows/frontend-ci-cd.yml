@@ -43,9 +43,19 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+        
+      - name: Fail if dist contains test-base
+        run: |
+          if grep -R "test-base" -n dist; then
+          echo "ERROR: test-base found in dist"
+          exit 1
+            fi
 
       - name: Build
         run: npm run build
+        env:
+          VITE_API_URL: /api
+
 
       - name: Upload dist artifact
         uses: actions/upload-artifact@v4
