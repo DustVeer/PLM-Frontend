@@ -39,7 +39,6 @@ describe("api request wrapper (unit)", async () => {
         vi.clearAllMocks();
 
         const clientModule = await import("../client.js");
-        clientModule.__setBaseUrlForTests("http://test-base/api");
         api = clientModule.api;
         ApiError = clientModule.ApiError;
 
