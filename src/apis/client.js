@@ -1,7 +1,7 @@
 import { getStoredToken } from "../context/AuthContext";
 
 
-const BASE_URL = import.meta.env.VITE_API_URL + "/api";
+const BASE_URL = import.meta.env.VITE_API_URL;
 
 export class ApiError extends Error {
     constructor(message, status, body) {
