@@ -38,16 +38,8 @@ describe("api request wrapper (unit)", async () => {
     beforeEach(async () => {
         vi.clearAllMocks();
 
-        vi.mock("../client.js", async () => {
-            const actual = await vi.importActual("../client.js");
-
-            return {
-                ...actual,
-                BASE_URL: "http://test-base/api",
-            };
-        });
-
         const clientModule = await import("../client.js");
+        clientModule.__setBaseUrlForTests("http://test-base/api");
         api = clientModule.api;
         ApiError = clientModule.ApiError;
 
