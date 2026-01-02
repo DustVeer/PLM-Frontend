@@ -21,15 +21,15 @@ jobs:
           cache: "npm"
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Run tests
         run: npm test
 
-  ci:
+  build:
     name: CI – Build frontend
     runs-on: ubuntu-latest
-    needs: test   
+    needs: test
 
     steps:
       - name: Checkout code
@@ -42,25 +42,33 @@ jobs:
           cache: "npm"
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build
         run: npm run build
 
+      - name: Upload dist artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
+
   deploy:
-    name: CD – Deploy to Raspberry Pi
-    runs-on: ubuntu-latest
-    needs: ci
+    name: CD – Deploy to Raspberry Pi (Self-hosted Runner)
+    runs-on: [self-hosted, Linux, ARM64]
+    needs: build
     if: github.ref == 'refs/heads/main'
 
     steps:
-      - name: Deploy to Pi over SSH
-        uses: appleboy/ssh-action@v1.0.0
+      - name: Download dist artifact
+        uses: actions/download-artifact@v4
         with:
-          host: ${{ secrets.PI_HOST }}
-          username: ${{ secrets.PI_USER }}
-          key: ${{ secrets.PI_SSH_KEY }}
-          port: ${{ secrets.PI_PORT }}
-          script: |
-            echo "[CI] Running deploy script on Pi..."
-            /home/dustveer/deploy-frontend.sh
+          name: dist
+          path: dist
+
+      - name: Deploy dist to /var/www/plm-frontend
+        run: |
+          sudo rsync -az --delete dist/ /var/www/plm-frontend/
+
+      - name: Reload Caddy
+        run: sudo systemctl reload caddy
